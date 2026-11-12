@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>網路與邊界防護層 核心軌跡日誌數據字典 (簡報展示卡片)</title>
+  <style>
+    :root {
+      --bg-page: #f0f2f5;
+      --card-bg: #ffffff;
+      --code-bg: #f8f9fa;
+      --border-color: #e1e4e8;
+      --text-main: #24292e;
+      --text-muted: #57606a;
+      --key-color: #0550ae;
+      --val-color: #116329;
+      --accent: #0969da;
+    }
+
+    body.theme-white {
+      --card-bg: #ffffff;
+      --code-bg: #ffffff;
+      --border-color: #d0d7de;
+    }
+
+    body.theme-gray {
+      --card-bg: #ffffff;
+      --code-bg: #f6f8fa;
+      --border-color: #d0d7de;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      padding: 30px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .top-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      background: #ffffff;
+      padding: 16px 24px;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid var(--border-color);
+    }
+
+    .title-group h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1f2328;
+    }
+
+    .title-group p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      background: #ffffff;
+      color: var(--text-main);
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: #f3f4f6;
+    }
+
+    .btn.active {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 8px;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      color: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+      background: #ffffff;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px 28px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      margin-bottom: 30px;
+      display: none;
+    }
+
+    .card.active {
+      display: block;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1f2328;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: #ddf4ff;
+      color: #0969da;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .code-container {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px 24px;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 13px;
+      line-height: 1.65;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .key {
+      color: var(--key-color);
+      font-weight: 600;
+    }
+
+    .val {
+      color: var(--val-color);
+    }
+
+    .punct {
+      color: #24292e;
+    }
+
+    .footer-note {
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+  </style>
+</head>
+<body class="theme-gray">
+
+<div class="container">
+  <div class="top-toolbar">
+    <div class="title-group">
+      <h1>網路與邊界防護層 核心軌跡日誌數據字典</h1>
+      <p>專案：terraform-aws-gaia-api-infra-litellm | 資安與異常流量監控標準</p>
+    </div>
+    <div class="controls">
+      <span style="font-size: 13px; color: var(--text-muted); font-weight: 500;">背景底色：</span>
+      <button class="btn active" id="btn-gray" onclick="setTheme('gray')">淺灰底 (#f6f8fa)</button>
+      <button class="btn" id="btn-white" onclick="setTheme('white')">純白底 (#ffffff)</button>
+    </div>
+  </div>
+
+  <div class="nav-tabs">
+    <div class="tab-btn" onclick="showTab(0)">1. VPC Flow Logs (14 欄位)</div>
+    <div class="tab-btn active" onclick="showTab(1)">2. ALB Access Logs (36 欄位)</div>
+    <div class="tab-btn" onclick="showTab(2)">3. AWS WAF 攔阻紀錄 (12 欄位)</div>
+    <div class="tab-btn" onclick="showTab(3)">4. Cognito 身分驗證 (12 欄位)</div>
+  </div>
+
+  <!-- Slide 1: VPC Flow Logs -->
+  <div class="card" id="card-0">
+    <div class="card-header">
+      <div class="card-title">
+        VPC Flow Logs
+        <span class="card-badge">共 14 欄位</span>
+      </div>
+      <div class="card-desc">L3/L4 網卡 ENI 網路封包層級軌跡（橫向移動與掃描分析）</div>
+    </div>
+    <div class="code-container"><span class="punct">{</span>
+  <span class="key">"version"</span><span class="punct">:</span> <span class="val">"Flow Log 版本"</span><span class="punct">,</span>
+  <span class="key">"account_id"</span><span class="punct">:</span> <span class="val">"AWS 帳號 ID"</span><span class="punct">,</span>
+  <span class="key">"interface_id"</span><span class="punct">:</span> <span class="val">"網卡 ENI ID"</span><span class="punct">,</span>
+  <span class="key">"srcaddr"</span><span class="punct">:</span> <span class="val">"來源 IP"</span><span class="punct">,</span>
+  <span class="key">"dstaddr"</span><span class="punct">:</span> <span class="val">"目的 IP"</span><span class="punct">,</span>
+  <span class="key">"srcport"</span><span class="punct">:</span> <span class="val">"來源 Port"</span><span class="punct">,</span>
+  <span class="key">"dstport"</span><span class="punct">:</span> <span class="val">"目的 Port"</span><span class="punct">,</span>
+  <span class="key">"protocol"</span><span class="punct">:</span> <span class="val">"通訊協定編號 (6=TCP, 17=UDP)"</span><span class="punct">,</span>
+  <span class="key">"packets"</span><span class="punct">:</span> <span class="val">"封包數"</span><span class="punct">,</span>
+  <span class="key">"bytes"</span><span class="punct">:</span> <span class="val">"位元組數"</span><span class="punct">,</span>
+  <span class="key">"start"</span><span class="punct">:</span> <span class="val">"採樣起始時間 (Unix Epoch 秒數)"</span><span class="punct">,</span>
+  <span class="key">"end"</span><span class="punct">:</span> <span class="val">"採樣結束時間 (Unix Epoch 秒數)"</span><span class="punct">,</span>
+  <span class="key">"action"</span><span class="punct">:</span> <span class="val">"網路處置動作 (ACCEPT 放行 / REJECT 阻擋)"</span><span class="punct">,</span>
+  <span class="key">"log_status"</span><span class="punct">:</span> <span class="val">"記錄狀態 (OK / NODATA / SKIPDATA)"</span>
+<span class="punct">}</span></div>
+    <div class="footer-note">適用於簡報單頁呈現・適合直接截圖或複製貼上 Keynote / PPT</div>
+  </div>
+
+  <!-- Slide 2: ALB Access Logs -->
+  <div class="card active" id="card-1">
+    <div class="card-header">
+      <div class="card-title">
+        ALB Access Logs
+        <span class="card-badge">共 36 欄位</span>
+      </div>
+      <div class="card-desc">L7 應用負載平衡器請求軌跡、TLS 握手、前後端處理耗時</div>
+    </div>
+    <div class="code-container"><span class="punct">{</span>
+  <span class="key">"type"</span><span class="punct">:</span> <span class="val">"請求協議類型 (h2 / https / ws)"</span><span class="punct">,</span>
+  <span class="key">"time"</span><span class="punct">:</span> <span class="val">"完成時間戳記 (ISO 8601)"</span><span class="punct">,</span>
+  <span class="key">"elb"</span><span class="punct">:</span> <span class="val">"ALB 資源名稱"</span><span class="punct">,</span>
+  <span class="key">"client:port"</span><span class="punct">:</span> <span class="val">"客戶端來源 IP 與 Port (例: 61.216.89.235:50342)"</span><span class="punct">,</span>
+  <span class="key">"target:port"</span><span class="punct">:</span> <span class="val">"後端容器私網 IP 與 Port (例: 10.42.11.154:4001)"</span><span class="punct">,</span>
+  <span class="key">"request_processing_time"</span><span class="punct">:</span> <span class="val">"ALB 接收處理耗時 (秒)"</span><span class="punct">,</span>
+  <span class="key">"target_processing_time"</span><span class="punct">:</span> <span class="val">"後端容器處理耗時 (秒)"</span><span class="punct">,</span>
+  <span class="key">"response_processing_time"</span><span class="punct">:</span> <span class="val">"ALB 回應傳送耗時 (秒)"</span><span class="punct">,</span>
+  <span class="key">"elb_status_code"</span><span class="punct">:</span> <span class="val">"ALB 回應 HTTP 狀態碼"</span><span class="punct">,</span>
+  <span class="key">"target_status_code"</span><span class="punct">:</span> <span class="val">"後端容器回傳 HTTP 狀態碼"</span><span class="punct">,</span>
+  <span class="key">"received_bytes"</span><span class="punct">:</span> <span class="val">"請求 Payload 大小 (Bytes)"</span><span class="punct">,</span>
+  <span class="key">"sent_bytes"</span><span class="punct">:</span> <span class="val">"回應 Payload 大小 (Bytes)"</span><span class="punct">,</span>
+  <span class="key">"request"</span><span class="punct">:</span> <span class="val">"HTTP 請求行 (例: GET https://... HTTP/2.0)"</span><span class="punct">,</span>
+  <span class="key">"user_agent"</span><span class="punct">:</span> <span class="val">"客戶端軟體特徵"</span><span class="punct">,</span>
+  <span class="key">"ssl_cipher"</span><span class="punct">:</span> <span class="val">"TLS 加密套件 (例: TLS_AES_128_GCM_SHA256)"</span><span class="punct">,</span>
+  <span class="key">"ssl_protocol"</span><span class="punct">:</span> <span class="val">"TLS 協定版本 (例: TLSv1.3)"</span><span class="punct">,</span>
+  <span class="key">"target_group_arn"</span><span class="punct">:</span> <span class="val">"目標群組 ARN"</span><span class="punct">,</span>
+  <span class="key">"trace_id"</span><span class="punct">:</span> <span class="val">"分散式鏈路追蹤 ID (Root=1-...)"</span><span class="punct">,</span>
+  <span class="key">"domain_name"</span><span class="punct">:</span> <span class="val">"SNI 請求網域名稱"</span><span class="punct">,</span>
+  <span class="key">"chosen_cert_arn"</span><span class="punct">:</span> <span class="val">"ACM 憑證 ARN 或連線復用標記"</span><span class="punct">,</span>
+  <span class="key">"matched_rule_priority"</span><span class="punct">:</span> <span class="val">"匹配規則優先級 (0 為預設)"</span><span class="punct">,</span>
+  <span class="key">"request_creation_time"</span><span class="punct">:</span> <span class="val">"請求抵達起始時間 (ISO 8601)"</span><span class="punct">,</span>
+  <span class="key">"actions_executed"</span><span class="punct">:</span> <span class="val">"處置動作鏈 (waf,forward / 僅 waf 為阻擋)"</span><span class="punct">,</span>
+  <span class="key">"redirect_url"</span><span class="punct">:</span> <span class="val">"轉址目標 URL"</span><span class="punct">,</span>
+  <span class="key">"error_reason"</span><span class="punct">:</span> <span class="val">"錯誤原因代碼"</span><span class="punct">,</span>
+  <span class="key">"target_port_list"</span><span class="punct">:</span> <span class="val">"嘗試轉發後端 IP:Port 清單"</span><span class="punct">,</span>
+  <span class="key">"target_status_code_list"</span><span class="punct">:</span> <span class="val">"後端嘗試狀態碼清單"</span><span class="punct">,</span>
+  <span class="key">"classification"</span><span class="punct">:</span> <span class="val">"畸形流量分類代碼"</span><span class="punct">,</span>
+  <span class="key">"classification_reason"</span><span class="punct">:</span> <span class="val">"畸形流量分類原因"</span><span class="punct">,</span>
+  <span class="key">"conn_trace_id"</span><span class="punct">:</span> <span class="val">"底層 TCP/TLS 連線 ID (TID_...)"</span><span class="punct">,</span>
+  <span class="key">"cert_subject"</span><span class="punct">:</span> <span class="val">"mTLS 客戶端憑證主旨"</span><span class="punct">,</span>
+  <span class="key">"cert_serial_number"</span><span class="punct">:</span> <span class="val">"mTLS 憑證序號"</span><span class="punct">,</span>
+  <span class="key">"cert_issuer_name"</span><span class="punct">:</span> <span class="val">"mTLS 簽發 CA"</span><span class="punct">,</span>
+  <span class="key">"listener_ip"</span><span class="punct">:</span> <span class="val">"ALB 監聽器公網實體 IP (例: 52.74.171.228)"</span><span class="punct">,</span>
+  <span class="key">"tls_named_group"</span><span class="punct">:</span> <span class="val">"TLS 密鑰交換群組"</span><span class="punct">,</span>
+  <span class="key">"client_tls_handshake_time"</span><span class="punct">:</span> <span class="val">"TLS 握手耗時 (秒)"</span>
+<span class="punct">}</span></div>
+    <div class="footer-note">適用於簡報單頁呈現・適合直接截圖或複製貼上 Keynote / PPT</div>
+  </div>
+
+  <!-- Slide 3: AWS WAF -->
+  <div class="card" id="card-2">
+    <div class="card-header">
+      <div class="card-title">
+        AWS WAF 攔阻紀錄
+        <span class="card-badge">共 12 欄位</span>
+      </div>
+      <div class="card-desc">L7 應用層安全防護、OWASP Top 10、規則命中與阻擋特徵</div>
+    </div>
+    <div class="code-container"><span class="punct">{</span>
+  <span class="key">"Timestamp"</span><span class="punct">:</span> <span class="val">"規則匹配時間戳記 (ISO 8601)"</span><span class="punct">,</span>
+  <span class="key">"ClientIP"</span><span class="punct">:</span> <span class="val">"來源 IP"</span><span class="punct">,</span>
+  <span class="key">"Country"</span><span class="punct">:</span> <span class="val">"來源國家代碼 (例: TW, US)"</span><span class="punct">,</span>
+  <span class="key">"Action"</span><span class="punct">:</span> <span class="val">"處置判定 (BLOCK / ALLOW)"</span><span class="punct">,</span>
+  <span class="key">"RuleName"</span><span class="punct">:</span> <span class="val">"命中規則名稱 (例: AWSManagedRulesKnownBadInputsRuleSet)"</span><span class="punct">,</span>
+  <span class="key">"RuleGroup"</span><span class="punct">:</span> <span class="val">"Web ACL 或規則群組名稱"</span><span class="punct">,</span>
+  <span class="key">"HTTPMethod"</span><span class="punct">:</span> <span class="val">"HTTP 請求方法"</span><span class="punct">,</span>
+  <span class="key">"URI"</span><span class="punct">:</span> <span class="val">"請求 URI 路徑"</span><span class="punct">,</span>
+  <span class="key">"MatchedFilter"</span><span class="punct">:</span> <span class="val">"命中攻擊特徵 (例: Log4Shell Pattern)"</span><span class="punct">,</span>
+  <span class="key">"Headers"</span><span class="punct">:</span> <span class="val">"請求標頭抽樣"</span><span class="punct">,</span>
+  <span class="key">"TerminatingRuleId"</span><span class="punct">:</span> <span class="val">"終止規則 ID"</span><span class="punct">,</span>
+  <span class="key">"WebACLArn"</span><span class="punct">:</span> <span class="val">"Web ACL ARN"</span>
+<span class="punct">}</span></div>
+    <div class="footer-note">適用於簡報單頁呈現・適合直接截圖或複製貼上 Keynote / PPT</div>
+  </div>
+
+  <!-- Slide 4: Cognito Auth Logs -->
+  <div class="card" id="card-3">
+    <div class="card-header">
+      <div class="card-title">
+        Cognito 身分驗證日誌
+        <span class="card-badge">共 12 欄位</span>
+      </div>
+      <div class="card-desc">OAuth2 Client Credentials 授權換發、憑證存取審核與失敗稽核</div>
+    </div>
+    <div class="code-container"><span class="punct">{</span>
+  <span class="key">"auth_timestamp"</span><span class="punct">:</span> <span class="val">"驗證時間戳記 (ISO 8601)"</span><span class="punct">,</span>
+  <span class="key">"auth_status"</span><span class="punct">:</span> <span class="val">"驗證結果 (SUCCESS / FAILED)"</span><span class="punct">,</span>
+  <span class="key">"client_id"</span><span class="punct">:</span> <span class="val">"OAuth2 客戶端識別碼 (例: 4h4j9v9mvmed5a36576e9oergk)"</span><span class="punct">,</span>
+  <span class="key">"client_name"</span><span class="punct">:</span> <span class="val">"App Client 註冊名稱 (例: alan-litellm-test)"</span><span class="punct">,</span>
+  <span class="key">"mapped_team_id"</span><span class="punct">:</span> <span class="val">"映射團隊 ID"</span><span class="punct">,</span>
+  <span class="key">"client_ip"</span><span class="punct">:</span> <span class="val">"認證連線來源 IP"</span><span class="punct">,</span>
+  <span class="key">"grant_type"</span><span class="punct">:</span> <span class="val">"OAuth 授權模式 (client_credentials)"</span><span class="punct">,</span>
+  <span class="key">"granted_scopes"</span><span class="punct">:</span> <span class="val">"核發 Scope 清單 (例: [\"litellm:chat\", \"litellm:models\"])"</span><span class="punct">,</span>
+  <span class="key">"user_pool_id"</span><span class="punct">:</span> <span class="val">"Cognito 使用者集區 ID"</span><span class="punct">,</span>
+  <span class="key">"token_expiration_sec"</span><span class="punct">:</span> <span class="val">"Token 有效秒數"</span><span class="punct">,</span>
+  <span class="key">"error_code"</span><span class="punct">:</span> <span class="val">"失敗代碼 (例: invalid_client, missing_scope)"</span><span class="punct">,</span>
+  <span class="key">"auth_error_message"</span><span class="punct">:</span> <span class="val">"失敗原因說明"</span>
+<span class="punct">}</span></div>
+    <div class="footer-note">適用於簡報單頁呈現・適合直接截圖或複製貼上 Keynote / PPT</div>
+  </div>
+</div>
+
+<script>
+  function setTheme(theme) {
+    document.body.className = 'theme-' + theme;
+    document.getElementById('btn-gray').classList.toggle('active', theme === 'gray');
+    document.getElementById('btn-white').classList.toggle('active', theme === 'white');
+  }
+
+  function showTab(index) {
+    const tabs = document.querySelectorAll('.tab-btn');
+    const cards = document.querySelectorAll('.card');
+    tabs.forEach((tab, i) => tab.classList.toggle('active', i === index));
+    cards.forEach((card, i) => card.classList.toggle('active', i === index));
+  }
+</script>
+
+</body>
+</html>
+
